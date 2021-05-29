@@ -1,0 +1,43 @@
+version: "3"
+services:
+  app:
+    build: ./flask
+    container_name: "flask"
+    tty: true
+    volumes:
+      - ./flask:/opt
+    environment: 
+      FLASK_APP: /opt/module/sample.py
+    command: flask run --host 0.0.0.0 --port 5000
+    ports:
+      - 5000:5000
+    networks:
+      - app-net
+    # コンテナログイン&dbコンテナへの接続
+    # docker exec -it flask /bin/sh
+    # mysql -u sample -psample -h db
+  db:
+    build: ./mysql
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sample
+      MYSQL_USER: sample
+      MYSQL_PASSWORD: sample
+      TZ: 'Asia/Tokyo'
+    command: > 
+        mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./mysql/db/data:/var/lib/mysql
+      - ./mysql/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - 3306:3306
+    networks:
+      - app-net
+    # テストデータ作成
+    # docker exec -it mysql /bin/sh
+    # mysql -u sample -psample sample < /tmp/test_db_create.sal
+
+networks:
+  app-net:
+    driver: bridge
