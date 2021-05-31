@@ -107,6 +107,7 @@ celerybeat.pid
 # mysql
 mysql/db/data
 
+
 # Environments
 .env
 .venv
