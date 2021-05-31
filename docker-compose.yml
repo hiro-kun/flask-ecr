@@ -6,8 +6,10 @@ services:
     tty: true
     volumes:
       - ./flask:/opt
+    restart: always
     environment: 
       FLASK_APP: /opt/module/sample.py
+      FLASK_ENV: "development"
     command: flask run --host 0.0.0.0 --port 5000
     ports:
       - 5000:5000
@@ -35,7 +37,7 @@ services:
     networks:
       - app-net
     # テストデータ作成
-    # docker exec -it mysql /bin/sh
+    # docker exec -it db /bin/sh
     # mysql -u sample -psample sample < /tmp/test_db_create.sal
 
 networks:
