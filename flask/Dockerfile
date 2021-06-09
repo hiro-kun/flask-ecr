@@ -14,3 +14,9 @@ RUN dnf install -y mysql-devel
 
 RUN pip install Flask
 RUN pip install mysql-connector-python-rf
+
+# 以下は単体で起動する場合
+COPY ./module /opt/module/
+ENV FLASK_APP /opt/module/sample.py
+CMD ["flask", "run", "-h", "0.0.0.0"]
+#docker run -p 5000:5000 imageID
